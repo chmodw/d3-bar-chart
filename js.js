@@ -19,7 +19,10 @@ d3.json(
 
     let data = modifier(gdpData.data);
 
-    var xScale = d3
+    /**
+     * add x and y scales
+     */
+    let xScale = d3
       .scaleTime()
       .domain([
         d3.min(data.map((item) => item.date)),
@@ -27,13 +30,29 @@ d3.json(
       ])
       .range([0, width]);
 
-    var xAxis = d3.axisBottom().scale(xScale);
+    let yScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(data.map((item) => item.gdp))])
+      .range([height, 0]);
+
+    let xAxis = d3.axisBottom().scale(xScale);
+    var yAxis = d3.axisLeft(yScale);
 
     chartContainer
       .append("g")
       .call(xAxis)
       .attr("id", "x-axis")
       .attr("transform", "translate(60, 400)");
+
+    chartContainer
+      .append("g")
+      .call(yAxis)
+      .attr("id", "y-axis")
+      .attr("transform", "translate(60, 0)");
+
+    /**
+     * add chart bars
+     */
   })
   .catch((error) => {
     if (error) throw error;
@@ -49,14 +68,14 @@ function modifier(data) {
       date: new Date(item[0]),
       year: parseInt(item[0].substring(0, 4)),
       gdp: parseFloat(item[1]),
-      quarter: getQuarter(item[0]),
+      quarter: getQuarters(item[0]),
     };
   });
 
   return modified;
 }
 
-function getQuarter(date) {
+function getQuarters(date) {
   if (date.substring(5, 7) <= 3) {
     return "Q1";
   } else if (date.substring(5, 7) <= 6) {
