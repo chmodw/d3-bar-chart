@@ -6,8 +6,9 @@ const height = 400;
 var chartContainer = d3
   .select("#chart-container")
   .append("svg")
-  .attr("width", width + 100)
-  .attr("height", height + 60);
+  .attr("width", width + 150)
+  .attr("height", height + 100)
+  .style("padding", 20);
 
 // const barWidth = width / data.count()
 
@@ -15,8 +16,6 @@ d3.json(
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json"
 )
   .then((gdpData) => {
-    d3.select(".test").append("text").text("Gross Domestic Product");
-
     let data = modifier(gdpData.data);
 
     /**
@@ -51,8 +50,42 @@ d3.json(
       .attr("transform", "translate(60, 0)");
 
     /**
+     *
+     * Change this later
+     *
+     */
+    var linearScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(data.map((item) => item.gdp))])
+      .range([0, height]);
+
+    /**
      * add chart bars
      */
+    d3.select("svg")
+      .selectAll("rect")
+      .data(
+        data
+          .map((d) => d.gdp)
+          .map((d) => {
+            linearScale(d);
+          })
+      )
+      .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .attr("data-date", data.date)
+      .attr("data-gdp", data.gdp)
+      .attr("x", 0)
+      .attr("y", function (d) {
+        return height - d;
+      })
+      .attr("width", width / 275)
+      .attr("height", function (d) {
+        return d;
+      })
+      .style("fill", "#33adff")
+      .attr("transform", "translate(60, 0)");
   })
   .catch((error) => {
     if (error) throw error;
