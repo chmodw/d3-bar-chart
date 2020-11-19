@@ -66,7 +66,7 @@ d3.json(
       .attr("x", (d) => xScale(d.date))
       .attr("width", width / data.length)
       .attr("height", (d) => linearScale(d.gdp))
-      .attr("data-date", (d) => d.date)
+      .attr("data-date", (d) => d.date.toISOString().substring(0, 10))
       .attr("data-gdp", (d) => d.gdp)
       .style("fill", "rgb(2, 70, 2)")
       .attr("transform", "translate(60, 0)")
@@ -81,9 +81,9 @@ d3.json(
           .select("#tooltip-gdp")
           .text("$" + d.gdp.toLocaleString() + " Billion");
         tooltip
-          .attr("data-date", d.date)
+          .attr("data-date", d.date.toISOString().substring(0, 10))
           .style("bottom", 100 + linearScale(d.gdp) + "px")
-          .style("left", xScale(d.date) + "px");
+          .style("left", 50 + xScale(d.date) + "px");
       })
       .on("mouseout", (m, d) => {
         d3.select("#bar-" + d.year + d.quarter).style("fill", "#024602");
