@@ -61,20 +61,31 @@ d3.json(
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("id", (d) => "bar-" + d.year + "-" + d.quarter)
+      .attr("id", (d) => "bar-" + d.year + d.quarter)
       .attr("y", (d) => height - linearScale(d.gdp))
       .attr("x", (d) => xScale(d.date))
       .attr("width", width / data.length)
       .attr("height", (d) => linearScale(d.gdp))
       .attr("data-date", (d) => d.date)
       .attr("data-gdp", (d) => d.gdp)
-      .attr("transform", "translate(60, 0)")
       .style("fill", "rgb(2, 70, 2)")
+      .attr("transform", "translate(60, 0)")
       .on("mouseover", (m, d) => {
-        d3.select("#bar-" + d.year + "-" + d.quarter).style("fill", "#FFF");
+        d3.select("#bar-" + d.year + d.quarter).style("fill", "#FFF");
+
+        let tooltip = d3.select("#tooltip");
+
+        tooltip.style("opacity", 0.9);
+        tooltip.select("#tooltip-date").text(d.year + " " + d.quarter);
+        tooltip.select("#tooltip-gdp").text(d.gdp);
+        tooltip
+          .attr("data-date", d.date)
+          .style("bottom", 100 + linearScale(d.gdp) + "px")
+          .style("left", xScale(d.date) + "px");
       })
       .on("mouseout", (m, d) => {
-        d3.select("#bar-" + d.year + "-" + d.quarter).style("fill", "#024602");
+        d3.select("#bar-" + d.year + d.quarter).style("fill", "#024602");
+        d3.select("#tooltip").style("opacity", 0);
       });
   })
   .catch((error) => {
@@ -88,7 +99,6 @@ function modifier(data) {
       year: parseInt(item[0].substring(0, 4)),
       gdp: parseFloat(item[1]),
       quarter: getQuarters(item[0]),
-      barHeight: 0,
     };
   });
 }

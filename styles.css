@@ -57,8 +57,24 @@ body {
     padding: 20px;
     background: #f4f4f4;
     margin: auto;
-    width: 50%;
     border: 3px solid #024602;
     padding: 10px;
     text-align: center;
+    position: relative;
+}
+
+#tooltip {
+    opacity: 0;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+    width: 150px;
+    /* height: 50px; */
+    padding: 2px;
+    font: 12px;
+    background: #ffffca;
+    box-shadow: 1px 1px 10px;
+    border-radius: 2px;
+    pointer-events: none;
 }
