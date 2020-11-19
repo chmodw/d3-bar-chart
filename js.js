@@ -77,7 +77,9 @@ d3.json(
 
         tooltip.style("opacity", 0.9);
         tooltip.select("#tooltip-date").text(d.year + " " + d.quarter);
-        tooltip.select("#tooltip-gdp").text(d.gdp);
+        tooltip
+          .select("#tooltip-gdp")
+          .text("$" + d.gdp.toLocaleString() + " Billion");
         tooltip
           .attr("data-date", d.date)
           .style("bottom", 100 + linearScale(d.gdp) + "px")
